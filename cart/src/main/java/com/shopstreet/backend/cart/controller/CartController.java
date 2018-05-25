@@ -18,7 +18,7 @@ public class CartController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AddItemResponseDTO addToCart(@RequestBody AddItemRequestDTO addItemRequestDTO) {
-        cartService.addToCart(addItemRequestDTO);
-        return null;
+        return cartService.addToCart(addItemRequestDTO);
+
     }
 }
