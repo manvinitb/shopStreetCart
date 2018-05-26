@@ -1,9 +1,7 @@
 package com.shopstreet.backend.cart.service;
 
 import com.shopstreet.backend.cart.dao.Cart;
-import com.shopstreet.backend.cart.dto.AddItemRequestDTO;
-import com.shopstreet.backend.cart.dto.AddItemResponseDTO;
-import com.shopstreet.backend.cart.dto.CartDto;
+import com.shopstreet.backend.cart.dto.*;
 import com.shopstreet.backend.cart.repository.CartRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -46,6 +46,25 @@ public class CartServiceImpl implements CartService {
 
 
 
+    @Override
+    public List<GetItemResponseDTO> getFromCart(Long cartid) {
+
+        ArrayList<Cart> cartArrayList = (ArrayList<Cart>) cartRepository.findByCartid(cartid);
+
+        ArrayList<GetItemResponseDTO> getItemResponseDTOArrayList = new ArrayList<>();
+
+        for(Cart cart: cartArrayList){
+            getItemResponseDTOArrayList.add(createGetItemResponseDTO(cart));
+
+        }
+
+        return getItemResponseDTOArrayList;
+
+
+
+    }
+
+
     private Cart createModelInInitialState(AddItemRequestDTO addItemRequestDTO) {
         Cart.CartBuilder builder = Cart.builder();
         builder.cartid(addItemRequestDTO.getCartid());
@@ -65,10 +84,25 @@ public class CartServiceImpl implements CartService {
         builder.price(Double.parseDouble(cart.getPrice()));
         return builder.build();
     }
+    private GetItemResponseDTO createGetItemResponseDTO(Cart cart){
+        GetItemResponseDTO.GetItemResponseDTOBuilder builder = GetItemResponseDTO.builder();
+        builder.cartid(cart.getCartid());
+        builder.mid(cart.getMid());
+        builder.pid(cart.getPid());
+        builder.qty(cart.getQty());
+        builder.price(Double.parseDouble(cart.getPrice()));
+        return builder.build();
+    }
+
+
+
+
 
 
     @Override
-    public boolean deleteFromCart(CartDto cartDto) {
-        return false;
+    public List<DeleteItemResponseDTO> deleteFromCart(DeleteItemRequestDTO deleteItemRequestDTO ) {
+
+
+        return null;
     }
 }

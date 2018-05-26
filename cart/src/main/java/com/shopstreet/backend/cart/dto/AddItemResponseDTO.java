@@ -13,7 +13,7 @@ import lombok.*;
 public class AddItemResponseDTO {
     private Long cartid;
     private Long pid;
-    private Long qty;
     private Long mid;
+    private Long qty;
     private Double price;
 }
