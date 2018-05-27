@@ -11,9 +11,7 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class AddItemResponseDTO {
-    private Long cartid;
-    private Long pid;
-    private Long mid;
-    private Long qty;
-    private Double price;
+
+    private Boolean success;
+    private String message;
 }

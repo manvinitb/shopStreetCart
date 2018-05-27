@@ -1,17 +1,16 @@
-package com.shopstreet.backend.cart.dto;
+package com.shopstreet.backend.cart.restclient.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-@Builder
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-
-public class DeleteItemResponseDTO {
-
-    private Boolean success;
-    private String message;
+public class InventoryRequestItemDTO {
+    private Long productID;
+    private Long merchantID;
+    private Long qty;
 }

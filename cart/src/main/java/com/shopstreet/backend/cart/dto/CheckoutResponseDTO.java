@@ -11,7 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DeleteItemRequestDTO {
-    private Long cartid;
-    private Long pid;
+public class CheckoutResponseDTO {
+
+    private boolean success;
+    private Long orderid;
+    private String message;
 }
