@@ -5,7 +5,6 @@ import com.shopstreet.backend.cart.restclient.dto.InventoryResponseItemDTO;
 import com.shopstreet.backend.cart.restclient.dto.InventoryUpdateRequestDTO;
 import com.shopstreet.backend.cart.restclient.dto.InventoryUpdateResponseDTO;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +31,18 @@ public class InventoryClient {
 //    }
 
     public InventoryUpdateResponseDTO updateAvailability(InventoryUpdateRequestDTO requestDTO) {
-//        String uri = BASE_PATH + UPDATE_AVAILABILITY;
-//        RestTemplate restTemplate = new RestTemplate();
-//        InventoryUpdateResponseDTO responseDTO = restTemplate.postForObject(uri, requestDTO, InventoryUpdateResponseDTO.class);
         List<InventoryResponseItemDTO> list = new ArrayList<>();
-        list.add(new InventoryResponseItemDTO(12L, true));
-        list.add(new InventoryResponseItemDTO(22L, true));
-        list.add(new InventoryResponseItemDTO(25L, true));
+        list.add(new InventoryResponseItemDTO(534L, true));
+        list.add(new InventoryResponseItemDTO(535L, false));
+        //list.add(new InventoryResponseItemDTO(25L, true));
         return new InventoryUpdateResponseDTO(list);
     }
 
 
     public InventoryResponseItemDTO checkAvailability(InventoryRequestItemDTO requestDTO) {
-        String uri = BASE_PATH + CHECK_AVAILABILITY;
-        RestTemplate restTemplate = new RestTemplate();
-        InventoryResponseItemDTO responseDTO = restTemplate.postForObject(uri, requestDTO, InventoryResponseItemDTO.class);
-        return responseDTO;
+//        String uri = BASE_PATH + CHECK_AVAILABILITY;
+//        RestTemplate restTemplate = new RestTemplate();
+//        InventoryResponseItemDTO responseDTO = restTemplate.postForObject(uri, requestDTO, InventoryResponseItemDTO.class);
+        return new InventoryResponseItemDTO(534L, true);
     }
 }

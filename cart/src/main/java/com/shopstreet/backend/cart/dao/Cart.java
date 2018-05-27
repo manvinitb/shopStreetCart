@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "cart", uniqueConstraints = {@UniqueConstraint(columnNames = {"cartid","pid","mid"})})
+@Table(name = "cart", uniqueConstraints = {@UniqueConstraint(columnNames = {"cartid", "pid"})})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +26,7 @@ public class Cart {
     private Long mid;
     private Long qty;
     private String price;
+    private String image;
+    private String productname;
+
 }

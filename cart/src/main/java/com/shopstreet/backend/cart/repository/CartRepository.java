@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface CartRepository extends CrudRepository<Cart, Long> {
 
-    public Cart findByCartidAndPidAndMid(Long cartid, Long pid, Long mid);
+    public Cart findByCartidAndPid(Long cartid, Long pid);
 
     @Modifying
     @Query(value = "update cart set qty=?1 where cartid=?2 and pid=?3 and mid=?4", nativeQuery = true)

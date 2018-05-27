@@ -3,6 +3,7 @@ package com.shopstreet.backend.cart.service;
 import com.shopstreet.backend.cart.dao.Cart;
 import com.shopstreet.backend.cart.dto.*;
 import com.shopstreet.backend.cart.repository.CartRepository;
+import com.shopstreet.backend.cart.restclient.CatalogClient;
 import com.shopstreet.backend.cart.restclient.InventoryClient;
 import com.shopstreet.backend.cart.restclient.MailClient;
 import com.shopstreet.backend.cart.restclient.OrderClient;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -32,6 +30,9 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private MailClient mailClient;
 
+    @Autowired
+    private CatalogClient catalogClient;
+
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     @Override
@@ -43,6 +44,7 @@ public class CartServiceImpl implements CartService {
         builder.productID(cart.getPid());
         builder.merchantID(cart.getMid());
         builder.qty(cart.getQty());
+
         InventoryRequestItemDTO inventoryRequestItemDTO = builder.build();
 
 
@@ -53,8 +55,7 @@ public class CartServiceImpl implements CartService {
         }
 
 
-        Cart findBycart = cartRepository.findByCartidAndPidAndMid(cart.getCartid(), cart.getPid(), cart.getMid());
-        Cart responseCart;
+        Cart findBycart = cartRepository.findByCartidAndPid(cart.getCartid(), cart.getPid());
 
         if (findBycart != null) {
             findBycart.setQty(cart.getQty());
@@ -65,7 +66,6 @@ public class CartServiceImpl implements CartService {
             return new AddItemResponseDTO(true, "Added to cart successfully");
 
         }
-
     }
 
 
@@ -76,24 +76,29 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    public List<GetItemResponseDTO> getFromCart(Long cartid) {
-        ArrayList<Cart> cartArrayList = (ArrayList<Cart>) cartRepository.findByCartid(cartid);
-        ArrayList<GetItemResponseDTO> getItemResponseDTOArrayList = new ArrayList<>();
-        for (Cart cart : cartArrayList) {
+    public GetCartResponseDTO getFromCart(Long cartid) {
+        List<Cart> cartList = cartRepository.findAllByCartid(cartid);
+        List<GetItemResponseDTO> getItemResponseDTOArrayList = new ArrayList<>();
+        GetCartResponseDTO getCartResponseDTO;
+
+        for (Cart cart : cartList) {
             getItemResponseDTOArrayList.add(createGetItemResponseDTO(cart));
 
         }
-        return getItemResponseDTOArrayList;
+        return new GetCartResponseDTO(true, "Successful", getItemResponseDTOArrayList);
     }
 
 
-    private Cart createModelInInitialState(AddItemRequestDTO addItemRequestDTO) {
+    private Cart createModelInInitialState(AddItemRequestDTO requestDTO) {
+        CatalogItemResponseDTO catalog = catalogClient.getProductDetails(new CatalogItemRequestDTO(requestDTO.getPid()));
         Cart.CartBuilder builder = Cart.builder();
-        builder.cartid(addItemRequestDTO.getCartid());
-        builder.mid(addItemRequestDTO.getMid());
-        builder.pid(addItemRequestDTO.getPid());
-        builder.qty(addItemRequestDTO.getQty());
-        builder.price(String.valueOf(addItemRequestDTO.getPrice()));
+        builder.cartid(requestDTO.getCartid());
+        builder.mid(requestDTO.getMid());
+        builder.pid(requestDTO.getPid());
+        builder.qty(requestDTO.getQty());
+        builder.price(String.valueOf(requestDTO.getPrice()));
+        builder.image(catalog.getImage());
+        builder.productname(catalog.getProductName());
         return builder.build();
     }
 
@@ -104,6 +109,8 @@ public class CartServiceImpl implements CartService {
         builder.mid(cart.getMid());
         builder.pid(cart.getPid());
         builder.qty(cart.getQty());
+        builder.image(cart.getImage());
+        builder.productName(cart.getProductname());
         builder.price(Double.parseDouble(cart.getPrice()));
         return builder.build();
     }
@@ -124,6 +131,7 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    @Transactional
     @Override
     public CheckoutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
         // 1. cart item details - List<Items>
@@ -161,7 +169,7 @@ public class CartServiceImpl implements CartService {
             builder.price(Double.parseDouble(cart.getPrice()));
             items.add(builder.build());
         }
-        CreateOrderRequestDTO requestDTO = new CreateOrderRequestDTO(userId, String.valueOf(cartId), items);
+        CreateOrderRequestDTO requestDTO = new CreateOrderRequestDTO(userId, UUID.randomUUID().toString(), items);
         CreateOrderResponseDTO responseDTO = orderClient.createOrder(requestDTO);
         return responseDTO.getOrderid();
     }

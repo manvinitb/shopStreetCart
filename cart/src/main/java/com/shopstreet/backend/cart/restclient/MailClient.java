@@ -15,8 +15,8 @@ public class MailClient {
 
     static {
         builder.append("Hi Amigo!\n\n");
-        builder.append("Your order: %d has been successfully placed.\n");
-        builder.append("Thanks for choosing shopStree!!\n\n");
+        builder.append("Your order with order id: %d has been successfully placed.\n");
+        builder.append("Thanks for choosing shopStreet!!\n\n");
         builder.append("Cheers :)");
         emailMessage = builder.toString();
     }
@@ -30,7 +30,7 @@ public class MailClient {
 
         helper.setTo(emailId);
         helper.setText(String.format(emailMessage, orderId));
-        helper.setSubject("Hi We Miss you!!");
+        helper.setSubject("Order Confirmation!!");
         sender.send(message);
     }
 }

@@ -12,5 +12,5 @@ import lombok.*;
 public class CatalogItemResponseDTO {
     private Long productID;
     private String image;
-    private Double productName;
+    private String productName;
 }
