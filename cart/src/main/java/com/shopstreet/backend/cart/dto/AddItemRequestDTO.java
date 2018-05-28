@@ -1,7 +1,10 @@
 package com.shopstreet.backend.cart.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -15,4 +18,15 @@ public class AddItemRequestDTO {
     private Long qty;
 
     private Double price;
+
+    @Override
+    public String toString() {
+        return "AddItemRequestDTO{" +
+                "cartid=" + cartid +
+                ", pid=" + pid +
+                ", mid=" + mid +
+                ", qty=" + qty +
+                ", price=" + price +
+                '}';
+    }
 }

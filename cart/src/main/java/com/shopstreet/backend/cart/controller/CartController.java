@@ -15,7 +15,7 @@ public class CartController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AddItemResponseDTO addToCart(@RequestBody AddItemRequestDTO addItemRequestDTO) {
-        System.out.println(addItemRequestDTO);
+        System.out.println(addItemRequestDTO.toString());
         try {
             return cartService.addToCart(addItemRequestDTO);
         } catch (Exception e) {
@@ -27,7 +27,9 @@ public class CartController {
     @RequestMapping(value = "/get/{cartid}", method = RequestMethod.GET)
     public GetCartResponseDTO getCart(@PathVariable Long cartid) {
         try {
+            System.out.println(cartid);
             return cartService.getFromCart(cartid);
+
         } catch (Exception e) {
             return new GetCartResponseDTO(false, "Something went wrong.", null);
         }

@@ -50,6 +50,8 @@ public class CartServiceImpl implements CartService {
 
         InventoryResponseItemDTO inventoryResponseItemDTO = inventoryClient.checkAvailability(inventoryRequestItemDTO);
 
+
+        //throw exception if any problem
         if (inventoryResponseItemDTO.getAvailable() == false) {
             return new AddItemResponseDTO(false, "This item is out of stock");
         }
@@ -59,13 +61,15 @@ public class CartServiceImpl implements CartService {
 
         if (findBycart != null) {
             findBycart.setQty(cart.getQty());
-            cartRepository.save(findBycart);
-            return new AddItemResponseDTO(true, "Added to cart successfully");
-        } else {
-            cartRepository.save(cart);
-            return new AddItemResponseDTO(true, "Added to cart successfully");
-
+            findBycart.setPrice(cart.getPrice());
         }
+//        else {
+//            cartRepository.save(cart);
+//            return new AddItemResponseDTO(true, "Added to cart successfully");
+//
+//        }
+        cartRepository.save(findBycart);
+        return new AddItemResponseDTO(true, "Added to cart successfully");
     }
 
 
