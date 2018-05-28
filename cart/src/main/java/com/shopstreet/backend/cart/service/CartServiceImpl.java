@@ -62,14 +62,14 @@ public class CartServiceImpl implements CartService {
         if (findBycart != null) {
             findBycart.setQty(cart.getQty());
             findBycart.setPrice(cart.getPrice());
+            cartRepository.save(findBycart);
+            return new AddItemResponseDTO(true, "Added to cart successfully");
+        } else {
+            cartRepository.save(cart);
+            return new AddItemResponseDTO(true, "Added to cart successfully");
+
         }
-//        else {
-//            cartRepository.save(cart);
-//            return new AddItemResponseDTO(true, "Added to cart successfully");
-//
-//        }
-        cartRepository.save(findBycart);
-        return new AddItemResponseDTO(true, "Added to cart successfully");
+
     }
 
 
@@ -171,6 +171,15 @@ public class CartServiceImpl implements CartService {
             builder.mid(cart.getMid());
             builder.qty(cart.getQty());
             builder.price(Double.parseDouble(cart.getPrice()));
+
+            //new work
+
+            builder.image(cart.getImage());
+            builder.productName(cart.getProductname());
+
+
+            /////////
+
             items.add(builder.build());
         }
         CreateOrderRequestDTO requestDTO = new CreateOrderRequestDTO(userId, UUID.randomUUID().toString(), items);
@@ -188,7 +197,7 @@ public class CartServiceImpl implements CartService {
         InventoryUpdateRequestDTO requestDTO = new InventoryUpdateRequestDTO(itemDTOList);
         InventoryUpdateResponseDTO responseDTO = inventoryClient.updateAvailability(requestDTO);
 
-        List<InventoryResponseItemDTO> itemAvailabilityList = responseDTO.getInventoryResponseItemDTOList();
+        List<InventoryResponseItemDTO> itemAvailabilityList = responseDTO.getStockResponseDtoList();
         Map<Long, Boolean> availabilityMap = new HashMap<>();
         for (InventoryResponseItemDTO itemDTO : itemAvailabilityList) {
             availabilityMap.put(itemDTO.getProductID(), itemDTO.getAvailable());

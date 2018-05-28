@@ -19,6 +19,7 @@ public class CartController {
         try {
             return cartService.addToCart(addItemRequestDTO);
         } catch (Exception e) {
+            e.printStackTrace();
             return new AddItemResponseDTO(false, "Something went wrong.");
         }
 
@@ -50,6 +51,7 @@ public class CartController {
         try {
             return cartService.checkout(checkoutRequestDTO);
         } catch (Exception e) {
+            e.printStackTrace();
             return new CheckoutResponseDTO(false, null, "Something went wrong.");
         }
     }

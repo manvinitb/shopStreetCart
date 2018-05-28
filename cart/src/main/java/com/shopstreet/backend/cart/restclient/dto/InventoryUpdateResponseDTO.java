@@ -13,5 +13,5 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InventoryUpdateResponseDTO {
 
-    private List<InventoryResponseItemDTO> inventoryResponseItemDTOList;
+    private List<InventoryResponseItemDTO> stockResponseDtoList;
 }

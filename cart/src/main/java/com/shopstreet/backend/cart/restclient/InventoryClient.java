@@ -10,28 +10,27 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class InventoryClient {
     private final String BASE_PATH = "http://10.177.1.131:8080";
-    private final String UPDATE_AVAILABILITY = "/product/update-availability";
-    private final String CHECK_AVAILABILITY = "/product/check-availability";
+    private final String UPDATE_AVAILABILITY = BASE_PATH + "/product/update-stock";
+    private final String CHECK_AVAILABILITY = BASE_PATH + "/product/check-availability";
+    private RestTemplate restTemplate = new RestTemplate();
 
     public InventoryUpdateResponseDTO updateAvailability(InventoryUpdateRequestDTO requestDTO) {
-        String uri = BASE_PATH + UPDATE_AVAILABILITY;
-        RestTemplate restTemplate = new RestTemplate();
-        InventoryUpdateResponseDTO responseDTO = restTemplate.postForObject(uri, requestDTO, InventoryUpdateResponseDTO.class);
+        // RestTemplate restTemplate = new RestTemplate();
+        InventoryUpdateResponseDTO responseDTO = restTemplate.postForObject(UPDATE_AVAILABILITY, requestDTO, InventoryUpdateResponseDTO.class);
         return responseDTO;
     }
 
 
     public InventoryResponseItemDTO checkAvailability(InventoryRequestItemDTO requestDTO) {
-        String uri = BASE_PATH + CHECK_AVAILABILITY;
-        RestTemplate restTemplate = new RestTemplate();
-        InventoryResponseItemDTO responseDTO = restTemplate.postForObject(uri, requestDTO, InventoryResponseItemDTO.class);
+        //RestTemplate restTemplate = new RestTemplate();
+        InventoryResponseItemDTO responseDTO = restTemplate.postForObject(CHECK_AVAILABILITY, requestDTO, InventoryResponseItemDTO.class);
         return responseDTO;
     }
 
 //    public InventoryUpdateResponseDTO updateAvailability(InventoryUpdateRequestDTO requestDTO) {
 //        List<InventoryResponseItemDTO> list = new ArrayList<>();
-//        list.add(new InventoryResponseItemDTO(534L, true));
-//        list.add(new InventoryResponseItemDTO(535L, false));
+//        list.add(new InventoryResponseItemDTO(2L, true));
+//        list.add(new InventoryResponseItemDTO(1L, true));
 //        //list.add(new InventoryResponseItemDTO(25L, true));
 //        return new InventoryUpdateResponseDTO(list);
 //    }
