@@ -10,14 +10,15 @@ import org.springframework.web.client.RestTemplate;
 public class OrderClient {
 
     private final String BASE_PATH = "http://localhost:3000";
-    private final String CREATE_ORDER_API = "/v1/oms/order/create";
+    private final String CREATE_ORDER_API = BASE_PATH + "/v1/oms/order/create";
+    private RestTemplate restTemplate = new RestTemplate();
 
     public CreateOrderResponseDTO createOrder(CreateOrderRequestDTO requestDTO) {
-        String uri = BASE_PATH + CREATE_ORDER_API;
-        RestTemplate restTemplate = new RestTemplate();
+
+
         CreateOrderResponseDTO responseDTO = null;
         try {
-            responseDTO = restTemplate.postForObject(uri, requestDTO, CreateOrderResponseDTO.class);
+            responseDTO = restTemplate.postForObject(CREATE_ORDER_API, requestDTO, CreateOrderResponseDTO.class);
         } catch (RestClientException e) {
             e.printStackTrace();
             throw e;
