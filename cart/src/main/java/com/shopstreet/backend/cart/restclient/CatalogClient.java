@@ -14,7 +14,9 @@ public class CatalogClient {
     public CatalogItemResponseDTO getProductDetails(CatalogItemRequestDTO requestDTO) {
 
 
-        CatalogItemResponseDTO responseDTO = restTemplate.getForObject(PRODUCT_DETAILS_API, CatalogItemResponseDTO.class);
+        String uri = String.format(PRODUCT_DETAILS_API, requestDTO.getProductID());
+
+        CatalogItemResponseDTO responseDTO = restTemplate.getForObject(uri, CatalogItemResponseDTO.class);
         return responseDTO;
     }
 

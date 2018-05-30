@@ -63,12 +63,13 @@ public class CartServiceImpl implements CartService {
             findBycart.setQty(cart.getQty());
             findBycart.setPrice(cart.getPrice());
             cartRepository.save(findBycart);
-            return new AddItemResponseDTO(true, "Added to cart successfully");
+
         } else {
             cartRepository.save(cart);
-            return new AddItemResponseDTO(true, "Added to cart successfully");
 
         }
+        return new AddItemResponseDTO(true, "Added to cart successfully");
+
 
     }
 
@@ -95,6 +96,7 @@ public class CartServiceImpl implements CartService {
 
     private Cart createModelInInitialState(AddItemRequestDTO requestDTO) {
         CatalogItemResponseDTO catalog = catalogClient.getProductDetails(new CatalogItemRequestDTO(requestDTO.getPid()));
+
         Cart.CartBuilder builder = Cart.builder();
         builder.cartid(requestDTO.getCartid());
         builder.mid(requestDTO.getMid());
@@ -155,8 +157,20 @@ public class CartServiceImpl implements CartService {
         cartRepository.deleteAllByCartid(checkoutRequestDTO.getCartid());
 
         // 5. email trigger- orderId, emailId  (config put emailId and password of real email google)
+
+        List<MailClientItemDTO> mailClientItemDTOList = new ArrayList<>();
+        for (Cart cart : cartList) {
+            MailClientItemDTO.MailClientItemDTOBuilder builder = MailClientItemDTO.builder();
+            builder.image(cart.getImage());
+            builder.productName(cart.getProductname());
+            builder.price(cart.getPrice());
+            mailClientItemDTOList.add(builder.build());
+        }
+        MailClientDTO mailClientDTO = new MailClientDTO(mailClientItemDTOList);
+
+
         try {
-            mailClient.sendEmail(orderId, checkoutRequestDTO.getEmail());
+            mailClient.sendEmail(orderId, checkoutRequestDTO.getEmail(), mailClientDTO);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

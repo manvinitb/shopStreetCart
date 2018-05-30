@@ -25,4 +25,5 @@ public interface CartRepository extends CrudRepository<Cart, Long> {
 
     public List<Cart> findAllByCartid(Long cartid);
 
+
 }

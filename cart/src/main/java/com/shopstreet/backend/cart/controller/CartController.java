@@ -15,7 +15,7 @@ public class CartController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AddItemResponseDTO addToCart(@RequestBody AddItemRequestDTO addItemRequestDTO) {
-        System.out.println(addItemRequestDTO.toString());
+
         try {
             return cartService.addToCart(addItemRequestDTO);
         } catch (Exception e) {
